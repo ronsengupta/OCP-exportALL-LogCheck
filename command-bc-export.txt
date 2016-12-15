@@ -1,0 +1,32 @@
+rons-Air:demo-na-box ronsengupta$ oc get bc
+NAME                TYPE      FROM      LATEST
+ruby-sample-build   Source    Git       1
+rons-Air:demo-na-box ronsengupta$ oc describe bc ruby-sample-build
+Name:		ruby-sample-build
+Namespace:	blog
+Created:	43 minutes ago
+Labels:		app=ruby-helloworld-sample
+		name=ruby-sample-build
+		template=application-template-stibuild
+Annotations:	<none>
+Latest Version:	1
+
+Strategy:		Source
+URL:			https://github.com/openshift/ruby-hello-world.git
+From Image:		ImageStreamTag openshift/ruby:latest
+Output to:		ImageStreamTag origin-ruby-sample:latest
+Post Commit Hook:	["<image-entrypoint>", "bundle", "exec", "rake", "test"]
+
+Build Run Policy:	Serial
+Triggered by:		ImageChange, Config
+Webhook GitHub:
+	URL:	https://master.na.openshift.opentlc.com:443/oapi/v1/namespaces/blog/buildconfigs/ruby-sample-build/webhooks/secret101/github
+Webhook Generic:
+	URL:		https://master.na.openshift.opentlc.com:443/oapi/v1/namespaces/blog/buildconfigs/ruby-sample-build/webhooks/secret101/generic
+	AllowEnv:	true
+
+Build			Status		Duration	Creation Time
+ruby-sample-build-1 	complete 	2m15s 		2016-12-15 19:15:09 +0800 SGT
+
+
+$ oc export bc ruby-sample-build -o yaml > ruby-sample-build-bc.yaml
