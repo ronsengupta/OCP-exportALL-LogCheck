@@ -1,0 +1,7 @@
+rons-Air:demo-na-box ronsengupta$ oc get dc
+NAME       REVISION   DESIRED   CURRENT   TRIGGERED BY
+database   1          1         1         config
+frontend   1          2         2         config,image(origin-ruby-sample:latest)
+rons-Air:demo-na-box ronsengupta$ oc export dc database -o yaml > database-dc.yaml
+rons-Air:demo-na-box ronsengupta$ oc export dc frontend -o yaml > frontend-dc.yaml
+rons-Air:demo-na-box ronsengupta$ 

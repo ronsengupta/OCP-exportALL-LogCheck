@@ -1,0 +1,90 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  creationTimestamp: null
+  generation: 2
+  labels:
+    app: ruby-helloworld-sample
+    template: application-template-stibuild
+  name: frontend
+spec:
+  replicas: 2
+  selector:
+    name: frontend
+  strategy:
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      post:
+        execNewPod:
+          command:
+          - /bin/true
+          containerName: ruby-helloworld
+          env:
+          - name: CUSTOM_VAR2
+            value: custom_value2
+        failurePolicy: Ignore
+      pre:
+        execNewPod:
+          command:
+          - /bin/true
+          containerName: ruby-helloworld
+          env:
+          - name: CUSTOM_VAR1
+            value: custom_value1
+        failurePolicy: Abort
+      timeoutSeconds: 120
+      updatePeriodSeconds: 1
+    type: Rolling
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        name: frontend
+    spec:
+      containers:
+      - env:
+        - name: ADMIN_USERNAME
+          value: admin4S3
+        - name: ADMIN_PASSWORD
+          value: eHIxTPbS
+        - name: MYSQL_USER
+          value: userY4D
+        - name: MYSQL_PASSWORD
+          value: uaPEMRkK
+        - name: MYSQL_DATABASE
+          value: root
+        image: 172.30.27.55:5000/blog/origin-ruby-sample@sha256:010b8c6c8076c5f29e9195a4b8605ea064943a3478663114fce26945b96c7357
+        imagePullPolicy: IfNotPresent
+        name: ruby-helloworld
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        resources: {}
+        securityContext:
+          capabilities: {}
+          privileged: false
+        terminationMessagePath: /dev/termination-log
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+  test: false
+  triggers:
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - ruby-helloworld
+      from:
+        kind: ImageStreamTag
+        name: origin-ruby-sample:latest
+        namespace: blog
+    type: ImageChange
+  - type: ConfigChange
+status:
+  availableReplicas: 2
+  observedGeneration: 2
+  replicas: 2
+  updatedReplicas: 2
