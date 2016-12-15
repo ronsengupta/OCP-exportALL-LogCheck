@@ -1,0 +1,1 @@
+$ oc new-app https://github.com/gaelL/simple-docker-app --strategy=docker
