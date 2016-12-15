@@ -1,0 +1,1062 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    creationTimestamp: 2016-12-15T11:15:09Z
+    labels:
+      app: ruby-helloworld-sample
+      name: ruby-sample-build
+      template: application-template-stibuild
+    name: ruby-sample-build
+    namespace: blog
+    resourceVersion: "2010556"
+    selfLink: /oapi/v1/namespaces/blog/buildconfigs/ruby-sample-build
+    uid: bd3feb7f-c2b7-11e6-b6a9-06758c768d2e
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: origin-ruby-sample:latest
+    postCommit:
+      args:
+      - bundle
+      - exec
+      - rake
+      - test
+    resources: {}
+    runPolicy: Serial
+    source:
+      git:
+        uri: https://github.com/openshift/ruby-hello-world.git
+      type: Git
+    strategy:
+      sourceStrategy:
+        env:
+        - name: EXAMPLE
+          value: sample-app
+        from:
+          kind: ImageStreamTag
+          name: ruby:latest
+          namespace: openshift
+      type: Source
+    triggers:
+    - github:
+        secret: secret101
+      type: GitHub
+    - generic:
+        allowEnv: true
+        secret: secret101
+      type: Generic
+    - imageChange:
+        lastTriggeredImageID: registry.access.redhat.com/rhscl/ruby-23-rhel7@sha256:3601dd48c3ee5def47fd641188bcf676f7447346296d4607c40862261b522d93
+      type: ImageChange
+    - type: ConfigChange
+  status:
+    lastVersion: 1
+- apiVersion: v1
+  kind: Build
+  metadata:
+    annotations:
+      openshift.io/build-config.name: ruby-sample-build
+      openshift.io/build.number: "1"
+      openshift.io/build.pod-name: ruby-sample-build-1-build
+    creationTimestamp: 2016-12-15T11:15:09Z
+    labels:
+      app: ruby-helloworld-sample
+      buildconfig: ruby-sample-build
+      name: ruby-sample-build
+      openshift.io/build-config.name: ruby-sample-build
+      openshift.io/build.start-policy: Serial
+      template: application-template-stibuild
+    name: ruby-sample-build-1
+    namespace: blog
+    resourceVersion: "2010779"
+    selfLink: /oapi/v1/namespaces/blog/builds/ruby-sample-build-1
+    uid: bd433820-c2b7-11e6-b6a9-06758c768d2e
+  spec:
+    output:
+      pushSecret:
+        name: builder-dockercfg-4lb0u
+      to:
+        kind: ImageStreamTag
+        name: origin-ruby-sample:latest
+    postCommit:
+      args:
+      - bundle
+      - exec
+      - rake
+      - test
+    resources: {}
+    revision:
+      git:
+        author:
+          email: bparees@users.noreply.github.com
+          name: Ben Parees
+        commit: e79d8870be808a7abb4ab304e94c8bee69d909c6
+        committer:
+          email: bparees@users.noreply.github.com
+          name: Ben Parees
+        message: 'Merge pull request #53 from danmcp/master'
+      type: Git
+    serviceAccount: builder
+    source:
+      git:
+        uri: https://github.com/openshift/ruby-hello-world.git
+      type: Git
+    strategy:
+      sourceStrategy:
+        env:
+        - name: EXAMPLE
+          value: sample-app
+        from:
+          kind: DockerImage
+          name: registry.access.redhat.com/rhscl/ruby-23-rhel7@sha256:3601dd48c3ee5def47fd641188bcf676f7447346296d4607c40862261b522d93
+      type: Source
+    triggeredBy:
+    - message: Build configuration change
+  status:
+    completionTimestamp: 2016-12-15T11:17:30Z
+    config:
+      kind: BuildConfig
+      name: ruby-sample-build
+      namespace: blog
+    duration: 135000000000
+    outputDockerImageReference: 172.30.27.55:5000/blog/origin-ruby-sample:latest
+    phase: Complete
+    startTimestamp: 2016-12-15T11:15:15Z
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    creationTimestamp: 2016-12-15T11:15:09Z
+    generation: 1
+    labels:
+      app: ruby-helloworld-sample
+      template: application-template-stibuild
+    name: origin-ruby-sample
+    namespace: blog
+    resourceVersion: "2010765"
+    selfLink: /oapi/v1/namespaces/blog/imagestreams/origin-ruby-sample
+    uid: bd3e2898-c2b7-11e6-b6a9-06758c768d2e
+  spec: {}
+  status:
+    dockerImageRepository: 172.30.27.55:5000/blog/origin-ruby-sample
+    tags:
+    - items:
+      - created: 2016-12-15T11:17:29Z
+        dockerImageReference: 172.30.27.55:5000/blog/origin-ruby-sample@sha256:010b8c6c8076c5f29e9195a4b8605ea064943a3478663114fce26945b96c7357
+        generation: 1
+        image: sha256:010b8c6c8076c5f29e9195a4b8605ea064943a3478663114fce26945b96c7357
+      tag: latest
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    annotations:
+      openshift.io/image.dockerRepositoryCheck: 2016-12-15T11:15:09Z
+    creationTimestamp: 2016-12-15T11:15:09Z
+    generation: 1
+    labels:
+      app: ruby-helloworld-sample
+      template: application-template-stibuild
+    name: ruby-22-rhel7
+    namespace: blog
+    resourceVersion: "2010581"
+    selfLink: /oapi/v1/namespaces/blog/imagestreams/ruby-22-rhel7
+    uid: bd3f09ee-c2b7-11e6-b6a9-06758c768d2e
+  spec:
+    dockerImageRepository: registry.access.redhat.com/openshift3/ruby-22-rhel7
+  status:
+    dockerImageRepository: 172.30.27.55:5000/blog/ruby-22-rhel7
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: 2016-12-15T11:15:09Z
+    generation: 1
+    labels:
+      app: ruby-helloworld-sample
+      template: application-template-stibuild
+    name: database
+    namespace: blog
+    resourceVersion: "2010659"
+    selfLink: /oapi/v1/namespaces/blog/deploymentconfigs/database
+    uid: bd59d701-c2b7-11e6-b6a9-06758c768d2e
+  spec:
+    replicas: 1
+    selector:
+      name: database
+    strategy:
+      recreateParams:
+        mid:
+          execNewPod:
+            command:
+            - /bin/true
+            containerName: ruby-helloworld-database
+            env:
+            - name: CUSTOM_VAR2
+              value: custom_value2
+            volumes:
+            - ruby-helloworld-data
+          failurePolicy: Abort
+        post:
+          execNewPod:
+            command:
+            - /bin/true
+            containerName: ruby-helloworld-database
+            env:
+            - name: CUSTOM_VAR2
+              value: custom_value2
+            volumes:
+            - ruby-helloworld-data
+          failurePolicy: Ignore
+        pre:
+          execNewPod:
+            command:
+            - /bin/true
+            containerName: ruby-helloworld-database
+            env:
+            - name: CUSTOM_VAR1
+              value: custom_value1
+            volumes:
+            - ruby-helloworld-data
+          failurePolicy: Abort
+        timeoutSeconds: 600
+      resources: {}
+      type: Recreate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          name: database
+      spec:
+        containers:
+        - env:
+          - name: MYSQL_USER
+            value: userY4D
+          - name: MYSQL_PASSWORD
+            value: uaPEMRkK
+          - name: MYSQL_DATABASE
+            value: root
+          image: registry.access.redhat.com/openshift3/mysql-55-rhel7:latest
+          imagePullPolicy: Always
+          name: ruby-helloworld-database
+          ports:
+          - containerPort: 3306
+            protocol: TCP
+          resources: {}
+          securityContext:
+            capabilities: {}
+            privileged: false
+          terminationMessagePath: /dev/termination-log
+          volumeMounts:
+          - mountPath: /var/lib/mysql/data
+            name: ruby-helloworld-data
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: ruby-helloworld-data
+    test: false
+    triggers:
+    - type: ConfigChange
+  status:
+    availableReplicas: 1
+    details:
+      causes:
+      - type: ConfigChange
+      message: caused by a config change
+    latestVersion: 1
+    observedGeneration: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    creationTimestamp: 2016-12-15T11:15:09Z
+    generation: 2
+    labels:
+      app: ruby-helloworld-sample
+      template: application-template-stibuild
+    name: frontend
+    namespace: blog
+    resourceVersion: "2010844"
+    selfLink: /oapi/v1/namespaces/blog/deploymentconfigs/frontend
+    uid: bd3fe77a-c2b7-11e6-b6a9-06758c768d2e
+  spec:
+    replicas: 2
+    selector:
+      name: frontend
+    strategy:
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        post:
+          execNewPod:
+            command:
+            - /bin/true
+            containerName: ruby-helloworld
+            env:
+            - name: CUSTOM_VAR2
+              value: custom_value2
+          failurePolicy: Ignore
+        pre:
+          execNewPod:
+            command:
+            - /bin/true
+            containerName: ruby-helloworld
+            env:
+            - name: CUSTOM_VAR1
+              value: custom_value1
+          failurePolicy: Abort
+        timeoutSeconds: 120
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          name: frontend
+      spec:
+        containers:
+        - env:
+          - name: ADMIN_USERNAME
+            value: admin4S3
+          - name: ADMIN_PASSWORD
+            value: eHIxTPbS
+          - name: MYSQL_USER
+            value: userY4D
+          - name: MYSQL_PASSWORD
+            value: uaPEMRkK
+          - name: MYSQL_DATABASE
+            value: root
+          image: 172.30.27.55:5000/blog/origin-ruby-sample@sha256:010b8c6c8076c5f29e9195a4b8605ea064943a3478663114fce26945b96c7357
+          imagePullPolicy: IfNotPresent
+          name: ruby-helloworld
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          resources: {}
+          securityContext:
+            capabilities: {}
+            privileged: false
+          terminationMessagePath: /dev/termination-log
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - ruby-helloworld
+        from:
+          kind: ImageStreamTag
+          name: origin-ruby-sample:latest
+          namespace: blog
+        lastTriggeredImage: 172.30.27.55:5000/blog/origin-ruby-sample@sha256:010b8c6c8076c5f29e9195a4b8605ea064943a3478663114fce26945b96c7357
+      type: ImageChange
+    - type: ConfigChange
+  status:
+    availableReplicas: 2
+    details:
+      causes:
+      - imageTrigger:
+          from:
+            kind: ImageStreamTag
+            name: origin-ruby-sample:latest
+            namespace: blog
+        type: ImageChange
+      message: caused by an image change
+    latestVersion: 1
+    observedGeneration: 2
+    replicas: 2
+    updatedReplicas: 2
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    annotations:
+      openshift.io/deployer-pod.name: database-1-deploy
+      openshift.io/deployment-config.latest-version: "1"
+      openshift.io/deployment-config.name: database
+      openshift.io/deployment.phase: Complete
+      openshift.io/deployment.replicas: "1"
+      openshift.io/deployment.status-reason: caused by a config change
+      openshift.io/encoded-deployment-config: |
+        {"kind":"DeploymentConfig","apiVersion":"v1","metadata":{"name":"database","namespace":"blog","selfLink":"/oapi/v1/namespaces/blog/deploymentconfigs/database","uid":"bd59d701-c2b7-11e6-b6a9-06758c768d2e","resourceVersion":"2010570","generation":1,"creationTimestamp":"2016-12-15T11:15:09Z","labels":{"app":"ruby-helloworld-sample","template":"application-template-stibuild"}},"spec":{"strategy":{"type":"Recreate","recreateParams":{"timeoutSeconds":600,"pre":{"failurePolicy":"Abort","execNewPod":{"command":["/bin/true"],"env":[{"name":"CUSTOM_VAR1","value":"custom_value1"}],"containerName":"ruby-helloworld-database","volumes":["ruby-helloworld-data"]}},"mid":{"failurePolicy":"Abort","execNewPod":{"command":["/bin/true"],"env":[{"name":"CUSTOM_VAR2","value":"custom_value2"}],"containerName":"ruby-helloworld-database","volumes":["ruby-helloworld-data"]}},"post":{"failurePolicy":"Ignore","execNewPod":{"command":["/bin/true"],"env":[{"name":"CUSTOM_VAR2","value":"custom_value2"}],"containerName":"ruby-helloworld-database","volumes":["ruby-helloworld-data"]}}},"resources":{}},"triggers":[{"type":"ConfigChange"}],"replicas":1,"test":false,"selector":{"name":"database"},"template":{"metadata":{"creationTimestamp":null,"labels":{"name":"database"}},"spec":{"volumes":[{"name":"ruby-helloworld-data","emptyDir":{}}],"containers":[{"name":"ruby-helloworld-database","image":"registry.access.redhat.com/openshift3/mysql-55-rhel7:latest","ports":[{"containerPort":3306,"protocol":"TCP"}],"env":[{"name":"MYSQL_USER","value":"userY4D"},{"name":"MYSQL_PASSWORD","value":"uaPEMRkK"},{"name":"MYSQL_DATABASE","value":"root"}],"resources":{},"volumeMounts":[{"name":"ruby-helloworld-data","mountPath":"/var/lib/mysql/data"}],"terminationMessagePath":"/dev/termination-log","imagePullPolicy":"Always","securityContext":{"capabilities":{},"privileged":false}}],"restartPolicy":"Always","terminationGracePeriodSeconds":30,"dnsPolicy":"ClusterFirst","securityContext":{}}}},"status":{"latestVersion":1,"observedGeneration":1,"details":{"message":"caused by a config change","causes":[{"type":"ConfigChange"}]}}}
+    creationTimestamp: 2016-12-15T11:15:09Z
+    generation: 2
+    labels:
+      app: ruby-helloworld-sample
+      openshift.io/deployment-config.name: database
+      template: application-template-stibuild
+    name: database-1
+    namespace: blog
+    resourceVersion: "2010683"
+    selfLink: /api/v1/namespaces/blog/replicationcontrollers/database-1
+    uid: bd5dba0b-c2b7-11e6-b6a9-06758c768d2e
+  spec:
+    replicas: 1
+    selector:
+      deployment: database-1
+      deploymentconfig: database
+      name: database
+    template:
+      metadata:
+        annotations:
+          openshift.io/deployment-config.latest-version: "1"
+          openshift.io/deployment-config.name: database
+          openshift.io/deployment.name: database-1
+        creationTimestamp: null
+        labels:
+          deployment: database-1
+          deploymentconfig: database
+          name: database
+      spec:
+        containers:
+        - env:
+          - name: MYSQL_USER
+            value: userY4D
+          - name: MYSQL_PASSWORD
+            value: uaPEMRkK
+          - name: MYSQL_DATABASE
+            value: root
+          image: registry.access.redhat.com/openshift3/mysql-55-rhel7:latest
+          imagePullPolicy: Always
+          name: ruby-helloworld-database
+          ports:
+          - containerPort: 3306
+            protocol: TCP
+          resources: {}
+          securityContext:
+            capabilities: {}
+            privileged: false
+          terminationMessagePath: /dev/termination-log
+          volumeMounts:
+          - mountPath: /var/lib/mysql/data
+            name: ruby-helloworld-data
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: ruby-helloworld-data
+  status:
+    fullyLabeledReplicas: 1
+    observedGeneration: 2
+    replicas: 1
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    annotations:
+      openshift.io/deployer-pod.name: frontend-1-deploy
+      openshift.io/deployment-config.latest-version: "1"
+      openshift.io/deployment-config.name: frontend
+      openshift.io/deployment.phase: Complete
+      openshift.io/deployment.replicas: "2"
+      openshift.io/deployment.status-reason: caused by an image change
+      openshift.io/encoded-deployment-config: |
+        {"kind":"DeploymentConfig","apiVersion":"v1","metadata":{"name":"frontend","namespace":"blog","selfLink":"/oapi/v1/namespaces/blog/deploymentconfigs/frontend","uid":"bd3fe77a-c2b7-11e6-b6a9-06758c768d2e","resourceVersion":"2010768","generation":2,"creationTimestamp":"2016-12-15T11:15:09Z","labels":{"app":"ruby-helloworld-sample","template":"application-template-stibuild"}},"spec":{"strategy":{"type":"Rolling","rollingParams":{"updatePeriodSeconds":1,"intervalSeconds":1,"timeoutSeconds":120,"maxUnavailable":"25%","maxSurge":"25%","pre":{"failurePolicy":"Abort","execNewPod":{"command":["/bin/true"],"env":[{"name":"CUSTOM_VAR1","value":"custom_value1"}],"containerName":"ruby-helloworld"}},"post":{"failurePolicy":"Ignore","execNewPod":{"command":["/bin/true"],"env":[{"name":"CUSTOM_VAR2","value":"custom_value2"}],"containerName":"ruby-helloworld"}}},"resources":{}},"triggers":[{"type":"ImageChange","imageChangeParams":{"automatic":true,"containerNames":["ruby-helloworld"],"from":{"kind":"ImageStreamTag","namespace":"blog","name":"origin-ruby-sample:latest"},"lastTriggeredImage":"172.30.27.55:5000/blog/origin-ruby-sample@sha256:010b8c6c8076c5f29e9195a4b8605ea064943a3478663114fce26945b96c7357"}},{"type":"ConfigChange"}],"replicas":2,"test":false,"selector":{"name":"frontend"},"template":{"metadata":{"creationTimestamp":null,"labels":{"name":"frontend"}},"spec":{"containers":[{"name":"ruby-helloworld","image":"172.30.27.55:5000/blog/origin-ruby-sample@sha256:010b8c6c8076c5f29e9195a4b8605ea064943a3478663114fce26945b96c7357","ports":[{"containerPort":8080,"protocol":"TCP"}],"env":[{"name":"ADMIN_USERNAME","value":"admin4S3"},{"name":"ADMIN_PASSWORD","value":"eHIxTPbS"},{"name":"MYSQL_USER","value":"userY4D"},{"name":"MYSQL_PASSWORD","value":"uaPEMRkK"},{"name":"MYSQL_DATABASE","value":"root"}],"resources":{},"terminationMessagePath":"/dev/termination-log","imagePullPolicy":"IfNotPresent","securityContext":{"capabilities":{},"privileged":false}}],"restartPolicy":"Always","terminationGracePeriodSeconds":30,"dnsPolicy":"ClusterFirst","securityContext":{}}}},"status":{"latestVersion":1,"observedGeneration":2,"details":{"message":"caused by an image change","causes":[{"type":"ImageChange","imageTrigger":{"from":{"kind":"ImageStreamTag","namespace":"blog","name":"origin-ruby-sample:latest"}}}]}}}
+    creationTimestamp: 2016-12-15T11:17:29Z
+    generation: 2
+    labels:
+      app: ruby-helloworld-sample
+      openshift.io/deployment-config.name: frontend
+      template: application-template-stibuild
+    name: frontend-1
+    namespace: blog
+    resourceVersion: "2010865"
+    selfLink: /api/v1/namespaces/blog/replicationcontrollers/frontend-1
+    uid: 10ce1936-c2b8-11e6-b6a9-06758c768d2e
+  spec:
+    replicas: 2
+    selector:
+      deployment: frontend-1
+      deploymentconfig: frontend
+      name: frontend
+    template:
+      metadata:
+        annotations:
+          openshift.io/deployment-config.latest-version: "1"
+          openshift.io/deployment-config.name: frontend
+          openshift.io/deployment.name: frontend-1
+        creationTimestamp: null
+        labels:
+          deployment: frontend-1
+          deploymentconfig: frontend
+          name: frontend
+      spec:
+        containers:
+        - env:
+          - name: ADMIN_USERNAME
+            value: admin4S3
+          - name: ADMIN_PASSWORD
+            value: eHIxTPbS
+          - name: MYSQL_USER
+            value: userY4D
+          - name: MYSQL_PASSWORD
+            value: uaPEMRkK
+          - name: MYSQL_DATABASE
+            value: root
+          image: 172.30.27.55:5000/blog/origin-ruby-sample@sha256:010b8c6c8076c5f29e9195a4b8605ea064943a3478663114fce26945b96c7357
+          imagePullPolicy: IfNotPresent
+          name: ruby-helloworld
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          resources: {}
+          securityContext:
+            capabilities: {}
+            privileged: false
+          terminationMessagePath: /dev/termination-log
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    fullyLabeledReplicas: 2
+    observedGeneration: 2
+    replicas: 2
+- apiVersion: v1
+  kind: Route
+  metadata:
+    annotations:
+      openshift.io/host.generated: "true"
+    creationTimestamp: 2016-12-15T11:15:09Z
+    labels:
+      app: ruby-helloworld-sample
+      template: application-template-stibuild
+    name: demoapp
+    namespace: blog
+    resourceVersion: "2010552"
+    selfLink: /oapi/v1/namespaces/blog/routes/demoapp
+    uid: bd3e10b2-c2b7-11e6-b6a9-06758c768d2e
+  spec:
+    host: demoapp-blog.cloudapps.na.openshift.opentlc.com
+    to:
+      kind: Service
+      name: frontend
+      weight: 100
+  status:
+    ingress:
+    - conditions:
+      - lastTransitionTime: 2016-12-15T11:15:09Z
+        status: "True"
+        type: Admitted
+      host: demoapp-blog.cloudapps.na.openshift.opentlc.com
+      routerName: router
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: 2016-12-15T11:15:09Z
+    labels:
+      app: ruby-helloworld-sample
+      template: application-template-stibuild
+    name: database
+    namespace: blog
+    resourceVersion: "2010569"
+    selfLink: /api/v1/namespaces/blog/services/database
+    uid: bd5b24d5-c2b7-11e6-b6a9-06758c768d2e
+  spec:
+    clusterIP: 172.30.26.8
+    portalIP: 172.30.26.8
+    ports:
+    - name: db
+      port: 5434
+      protocol: TCP
+      targetPort: 3306
+    selector:
+      name: database
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: 2016-12-15T11:15:09Z
+    labels:
+      app: ruby-helloworld-sample
+      template: application-template-stibuild
+    name: frontend
+    namespace: blog
+    resourceVersion: "2010553"
+    selfLink: /api/v1/namespaces/blog/services/frontend
+    uid: bd407116-c2b7-11e6-b6a9-06758c768d2e
+  spec:
+    clusterIP: 172.30.149.234
+    portalIP: 172.30.149.234
+    ports:
+    - name: web
+      port: 5432
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      name: frontend
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      kubernetes.io/created-by: |
+        {"kind":"SerializedReference","apiVersion":"v1","reference":{"kind":"ReplicationController","namespace":"blog","name":"database-1","uid":"bd5dba0b-c2b7-11e6-b6a9-06758c768d2e","apiVersion":"v1","resourceVersion":"2010636"}}
+      kubernetes.io/limit-ranger: 'LimitRanger plugin set: cpu, memory request for
+        container ruby-helloworld-database; cpu, memory limit for container ruby-helloworld-database'
+      openshift.io/deployment-config.latest-version: "1"
+      openshift.io/deployment-config.name: database
+      openshift.io/deployment.name: database-1
+      openshift.io/scc: restricted
+    creationTimestamp: 2016-12-15T11:15:34Z
+    generateName: database-1-
+    labels:
+      deployment: database-1
+      deploymentconfig: database
+      name: database
+    name: database-1-p4kr5
+    namespace: blog
+    resourceVersion: "2010658"
+    selfLink: /api/v1/namespaces/blog/pods/database-1-p4kr5
+    uid: cc1be4fa-c2b7-11e6-b6a9-06758c768d2e
+  spec:
+    containers:
+    - env:
+      - name: MYSQL_USER
+        value: userY4D
+      - name: MYSQL_PASSWORD
+        value: uaPEMRkK
+      - name: MYSQL_DATABASE
+        value: root
+      image: registry.access.redhat.com/openshift3/mysql-55-rhel7:latest
+      imagePullPolicy: Always
+      name: ruby-helloworld-database
+      ports:
+      - containerPort: 3306
+        protocol: TCP
+      resources:
+        limits:
+          cpu: 300m
+          memory: 2Gi
+        requests:
+          cpu: 300m
+          memory: 256Mi
+      securityContext:
+        capabilities:
+          drop:
+          - KILL
+          - MKNOD
+          - SETGID
+          - SETUID
+          - SYS_CHROOT
+        privileged: false
+        runAsUser: 1001590000
+        seLinuxOptions:
+          level: s0:c40,c15
+      terminationMessagePath: /dev/termination-log
+      volumeMounts:
+      - mountPath: /var/lib/mysql/data
+        name: ruby-helloworld-data
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: default-token-b0772
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    host: node3.na.openshift.opentlc.com.internal
+    imagePullSecrets:
+    - name: default-dockercfg-9z280
+    nodeName: node3.na.openshift.opentlc.com.internal
+    nodeSelector:
+      region: primary
+    restartPolicy: Always
+    securityContext:
+      fsGroup: 1001590000
+      seLinuxOptions:
+        level: s0:c40,c15
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    volumes:
+    - emptyDir: {}
+      name: ruby-helloworld-data
+    - name: default-token-b0772
+      secret:
+        secretName: default-token-b0772
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: 2016-12-15T11:15:34Z
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: 2016-12-15T11:15:41Z
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: 2016-12-15T11:15:34Z
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://77d479498c10bf368897d4918e26c22dbbb97868b8c9b8206e85b2a513c0007b
+      image: registry.access.redhat.com/openshift3/mysql-55-rhel7:latest
+      imageID: docker-pullable://registry.access.redhat.com/openshift3/mysql-55-rhel7@sha256:9429be9f0188443cfd7ee0607760beffe0aad3d43c78bdd6d1c5f87925918f7b
+      lastState: {}
+      name: ruby-helloworld-database
+      ready: true
+      restartCount: 0
+      state:
+        running:
+          startedAt: 2016-12-15T11:15:40Z
+    hostIP: 192.199.0.118
+    phase: Running
+    podIP: 10.1.3.6
+    startTime: 2016-12-15T11:15:34Z
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      kubernetes.io/created-by: |
+        {"kind":"SerializedReference","apiVersion":"v1","reference":{"kind":"ReplicationController","namespace":"blog","name":"frontend-1","uid":"10ce1936-c2b8-11e6-b6a9-06758c768d2e","apiVersion":"v1","resourceVersion":"2010810"}}
+      kubernetes.io/limit-ranger: 'LimitRanger plugin set: cpu, memory request for
+        container ruby-helloworld; cpu, memory limit for container ruby-helloworld'
+      openshift.io/deployment-config.latest-version: "1"
+      openshift.io/deployment-config.name: frontend
+      openshift.io/deployment.name: frontend-1
+      openshift.io/scc: restricted
+    creationTimestamp: 2016-12-15T11:17:46Z
+    generateName: frontend-1-
+    labels:
+      deployment: frontend-1
+      deploymentconfig: frontend
+      name: frontend
+    name: frontend-1-uyaw5
+    namespace: blog
+    resourceVersion: "2010835"
+    selfLink: /api/v1/namespaces/blog/pods/frontend-1-uyaw5
+    uid: 1b3ac852-c2b8-11e6-b6a9-06758c768d2e
+  spec:
+    containers:
+    - env:
+      - name: ADMIN_USERNAME
+        value: admin4S3
+      - name: ADMIN_PASSWORD
+        value: eHIxTPbS
+      - name: MYSQL_USER
+        value: userY4D
+      - name: MYSQL_PASSWORD
+        value: uaPEMRkK
+      - name: MYSQL_DATABASE
+        value: root
+      image: 172.30.27.55:5000/blog/origin-ruby-sample@sha256:010b8c6c8076c5f29e9195a4b8605ea064943a3478663114fce26945b96c7357
+      imagePullPolicy: IfNotPresent
+      name: ruby-helloworld
+      ports:
+      - containerPort: 8080
+        protocol: TCP
+      resources:
+        limits:
+          cpu: 300m
+          memory: 2Gi
+        requests:
+          cpu: 300m
+          memory: 256Mi
+      securityContext:
+        capabilities:
+          drop:
+          - KILL
+          - MKNOD
+          - SETGID
+          - SETUID
+          - SYS_CHROOT
+        privileged: false
+        runAsUser: 1001590000
+        seLinuxOptions:
+          level: s0:c40,c15
+      terminationMessagePath: /dev/termination-log
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: default-token-b0772
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    host: node2.na.openshift.opentlc.com.internal
+    imagePullSecrets:
+    - name: default-dockercfg-9z280
+    nodeName: node2.na.openshift.opentlc.com.internal
+    nodeSelector:
+      region: primary
+    restartPolicy: Always
+    securityContext:
+      fsGroup: 1001590000
+      seLinuxOptions:
+        level: s0:c40,c15
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    volumes:
+    - name: default-token-b0772
+      secret:
+        secretName: default-token-b0772
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: 2016-12-15T11:17:46Z
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: 2016-12-15T11:17:52Z
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: 2016-12-15T11:17:46Z
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://493ce4bab811ab73c0b9f003b626da07060cd10e79a1fd52c7c267bc6d134626
+      image: 172.30.27.55:5000/blog/origin-ruby-sample@sha256:010b8c6c8076c5f29e9195a4b8605ea064943a3478663114fce26945b96c7357
+      imageID: docker-pullable://172.30.27.55:5000/blog/origin-ruby-sample@sha256:010b8c6c8076c5f29e9195a4b8605ea064943a3478663114fce26945b96c7357
+      lastState: {}
+      name: ruby-helloworld
+      ready: true
+      restartCount: 0
+      state:
+        running:
+          startedAt: 2016-12-15T11:17:52Z
+    hostIP: 192.199.0.117
+    phase: Running
+    podIP: 10.1.1.4
+    startTime: 2016-12-15T11:17:46Z
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      kubernetes.io/created-by: |
+        {"kind":"SerializedReference","apiVersion":"v1","reference":{"kind":"ReplicationController","namespace":"blog","name":"frontend-1","uid":"10ce1936-c2b8-11e6-b6a9-06758c768d2e","apiVersion":"v1","resourceVersion":"2010810"}}
+      kubernetes.io/limit-ranger: 'LimitRanger plugin set: cpu, memory request for
+        container ruby-helloworld; cpu, memory limit for container ruby-helloworld'
+      openshift.io/deployment-config.latest-version: "1"
+      openshift.io/deployment-config.name: frontend
+      openshift.io/deployment.name: frontend-1
+      openshift.io/scc: restricted
+    creationTimestamp: 2016-12-15T11:17:46Z
+    generateName: frontend-1-
+    labels:
+      deployment: frontend-1
+      deploymentconfig: frontend
+      name: frontend
+    name: frontend-1-woaxk
+    namespace: blog
+    resourceVersion: "2010843"
+    selfLink: /api/v1/namespaces/blog/pods/frontend-1-woaxk
+    uid: 1b38b4a3-c2b8-11e6-b6a9-06758c768d2e
+  spec:
+    containers:
+    - env:
+      - name: ADMIN_USERNAME
+        value: admin4S3
+      - name: ADMIN_PASSWORD
+        value: eHIxTPbS
+      - name: MYSQL_USER
+        value: userY4D
+      - name: MYSQL_PASSWORD
+        value: uaPEMRkK
+      - name: MYSQL_DATABASE
+        value: root
+      image: 172.30.27.55:5000/blog/origin-ruby-sample@sha256:010b8c6c8076c5f29e9195a4b8605ea064943a3478663114fce26945b96c7357
+      imagePullPolicy: IfNotPresent
+      name: ruby-helloworld
+      ports:
+      - containerPort: 8080
+        protocol: TCP
+      resources:
+        limits:
+          cpu: 300m
+          memory: 2Gi
+        requests:
+          cpu: 300m
+          memory: 256Mi
+      securityContext:
+        capabilities:
+          drop:
+          - KILL
+          - MKNOD
+          - SETGID
+          - SETUID
+          - SYS_CHROOT
+        privileged: false
+        runAsUser: 1001590000
+        seLinuxOptions:
+          level: s0:c40,c15
+      terminationMessagePath: /dev/termination-log
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: default-token-b0772
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    host: node1.na.openshift.opentlc.com.internal
+    imagePullSecrets:
+    - name: default-dockercfg-9z280
+    nodeName: node1.na.openshift.opentlc.com.internal
+    nodeSelector:
+      region: primary
+    restartPolicy: Always
+    securityContext:
+      fsGroup: 1001590000
+      seLinuxOptions:
+        level: s0:c40,c15
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    volumes:
+    - name: default-token-b0772
+      secret:
+        secretName: default-token-b0772
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: 2016-12-15T11:17:46Z
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: 2016-12-15T11:17:55Z
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: 2016-12-15T11:17:46Z
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://0f97f33cf06e9c3085e456dc90420803d6947c9b08e57240394caeb41f228503
+      image: 172.30.27.55:5000/blog/origin-ruby-sample@sha256:010b8c6c8076c5f29e9195a4b8605ea064943a3478663114fce26945b96c7357
+      imageID: docker-pullable://172.30.27.55:5000/blog/origin-ruby-sample@sha256:010b8c6c8076c5f29e9195a4b8605ea064943a3478663114fce26945b96c7357
+      lastState: {}
+      name: ruby-helloworld
+      ready: true
+      restartCount: 0
+      state:
+        running:
+          startedAt: 2016-12-15T11:17:55Z
+    hostIP: 192.199.0.115
+    phase: Running
+    podIP: 10.1.2.4
+    startTime: 2016-12-15T11:17:46Z
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      kubernetes.io/limit-ranger: 'LimitRanger plugin set: cpu, memory request for
+        container sti-build; cpu, memory limit for container sti-build'
+      openshift.io/build.name: ruby-sample-build-1
+      openshift.io/scc: privileged
+    creationTimestamp: 2016-12-15T11:15:09Z
+    labels:
+      openshift.io/build.name: ruby-sample-build-1
+    name: ruby-sample-build-1-build
+    namespace: blog
+    resourceVersion: "2010778"
+    selfLink: /api/v1/namespaces/blog/pods/ruby-sample-build-1-build
+    uid: bd468c4d-c2b7-11e6-b6a9-06758c768d2e
+  spec:
+    containers:
+    - args:
+      - --loglevel=0
+      env:
+      - name: BUILD
+        value: |
+          {"kind":"Build","apiVersion":"v1","metadata":{"name":"ruby-sample-build-1","namespace":"blog","selfLink":"/oapi/v1/namespaces/blog/builds/ruby-sample-build-1","uid":"bd433820-c2b7-11e6-b6a9-06758c768d2e","resourceVersion":"2010557","creationTimestamp":"2016-12-15T11:15:09Z","labels":{"app":"ruby-helloworld-sample","buildconfig":"ruby-sample-build","name":"ruby-sample-build","openshift.io/build-config.name":"ruby-sample-build","openshift.io/build.start-policy":"Serial","template":"application-template-stibuild"},"annotations":{"openshift.io/build-config.name":"ruby-sample-build","openshift.io/build.number":"1"}},"spec":{"serviceAccount":"builder","source":{"type":"Git","git":{"uri":"https://github.com/openshift/ruby-hello-world.git"}},"strategy":{"type":"Source","sourceStrategy":{"from":{"kind":"DockerImage","name":"registry.access.redhat.com/rhscl/ruby-23-rhel7@sha256:3601dd48c3ee5def47fd641188bcf676f7447346296d4607c40862261b522d93"},"env":[{"name":"EXAMPLE","value":"sample-app"}]}},"output":{"to":{"kind":"DockerImage","name":"172.30.27.55:5000/blog/origin-ruby-sample:latest"},"pushSecret":{"name":"builder-dockercfg-4lb0u"}},"resources":{},"postCommit":{"args":["bundle","exec","rake","test"]},"triggeredBy":[{"message":"Build configuration change"}]},"status":{"phase":"New","outputDockerImageReference":"172.30.27.55:5000/blog/origin-ruby-sample:latest","config":{"kind":"BuildConfig","namespace":"blog","name":"ruby-sample-build"}}}
+      - name: SOURCE_REPOSITORY
+        value: https://github.com/openshift/ruby-hello-world.git
+      - name: SOURCE_URI
+        value: https://github.com/openshift/ruby-hello-world.git
+      - name: ORIGIN_VERSION
+        value: v3.3.1.3
+      - name: ALLOWED_UIDS
+        value: 1-
+      - name: DROP_CAPS
+        value: KILL,MKNOD,SETGID,SETUID,SYS_CHROOT
+      - name: PUSH_DOCKERCFG_PATH
+        value: /var/run/secrets/openshift.io/push
+      image: openshift3/ose-sti-builder:v3.3.1.3
+      imagePullPolicy: IfNotPresent
+      name: sti-build
+      resources:
+        limits:
+          cpu: 300m
+          memory: 2Gi
+        requests:
+          cpu: 300m
+          memory: 256Mi
+      securityContext:
+        privileged: true
+      terminationMessagePath: /dev/termination-log
+      volumeMounts:
+      - mountPath: /var/run/docker.sock
+        name: docker-socket
+      - mountPath: /var/run/secrets/openshift.io/push
+        name: builder-dockercfg-4lb0u-push
+        readOnly: true
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: builder-token-fu7z4
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    host: node3.na.openshift.opentlc.com.internal
+    imagePullSecrets:
+    - name: builder-dockercfg-4lb0u
+    nodeName: node3.na.openshift.opentlc.com.internal
+    nodeSelector:
+      region: primary
+    restartPolicy: Never
+    securityContext: {}
+    serviceAccount: builder
+    serviceAccountName: builder
+    terminationGracePeriodSeconds: 30
+    volumes:
+    - hostPath:
+        path: /var/run/docker.sock
+      name: docker-socket
+    - name: builder-dockercfg-4lb0u-push
+      secret:
+        secretName: builder-dockercfg-4lb0u
+    - name: builder-token-fu7z4
+      secret:
+        secretName: builder-token-fu7z4
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: 2016-12-15T11:15:09Z
+      reason: PodCompleted
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: 2016-12-15T11:17:30Z
+      reason: PodCompleted
+      status: "False"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: 2016-12-15T11:15:09Z
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://e8644b4b8eee0b0f4a01c2d84df4547afe6d45b34fb3e8161a854b4bae87674e
+      image: openshift3/ose-sti-builder:v3.3.1.3
+      imageID: docker-pullable://registry.access.redhat.com/openshift3/ose-sti-builder@sha256:aae47324c37ed75f15d7e2fe95f03dfd1dab8c8f7bf17558514d1025b1e73c6c
+      lastState: {}
+      name: sti-build
+      ready: false
+      restartCount: 0
+      state:
+        terminated:
+          containerID: docker://e8644b4b8eee0b0f4a01c2d84df4547afe6d45b34fb3e8161a854b4bae87674e
+          exitCode: 0
+          finishedAt: 2016-12-15T11:17:29Z
+          reason: Completed
+          startedAt: 2016-12-15T11:15:15Z
+    hostIP: 192.199.0.118
+    phase: Succeeded
+    podIP: 10.1.3.5
+    startTime: 2016-12-15T11:15:09Z
+kind: List
+metadata: {}

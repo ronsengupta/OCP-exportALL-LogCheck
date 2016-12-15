@@ -1,0 +1,14 @@
+==OCP Log Checking
+
+$ journalctl -f -u atomic-openshift-master
+$ oc logs -f builds/sti-php-1
+
+Some generic example
+journalctl --since "1 hour ago”
+journalctl --since "2 days ago”
+journalctl --since "2015-06-26 23:15:00" --until "2015-06-26 23:20:00”
+Note- To see messages logged by any systemd unit, use the -u switch.
+
+
+In My CDK: 
+[vagrant@rhel-cdk showcookie]$ sudo journalctl -f -u openshift
