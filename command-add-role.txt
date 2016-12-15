@@ -1,0 +1,1 @@
+A project admin can add you to a role on a project by running the command oc policy add-role-to-user <role> ssengupt-redhat.com -n <projectname>
