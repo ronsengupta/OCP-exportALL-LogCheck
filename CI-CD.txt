@@ -1,0 +1,1 @@
+$oc new-app jenkins-persistent -p JENKINS_PASSWORD=openshiftpipelines  -n conci
